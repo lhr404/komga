@@ -140,6 +140,7 @@ import {subMonths} from 'date-fns'
 import {BookSseDto, ReadProgressSeriesSseDto, ReadProgressSseDto, SeriesSseDto} from '@/types/komga-sse'
 import {LibraryDto} from '@/types/komga-libraries'
 import {PageLoader} from '@/types/pageLoader'
+import {ContextOrigin} from '@/types/context'
 import {ItemContext} from '@/types/items'
 import {
   BookSearch,
@@ -201,6 +202,7 @@ export default Vue.extend({
       loaderOnDeckBooks: undefined as PageLoader<BookDto> | undefined,
       loaderRecentlyReleasedBooks: undefined as PageLoader<BookDto> | undefined,
       loaderRecentlyReadBooks: undefined as PageLoader<BookDto> | undefined,
+      loaderRandomUnreadBooks: undefined as PageLoader<BookDto> | undefined,
       selectedSeries: [] as SeriesDto[],
       selectedBooks: [] as BookDto[],
     }
@@ -310,7 +312,8 @@ export default Vue.extend({
         (this.loaderKeepReadingBooks == undefined || this.loaderKeepReadingBooks?.items.length === 0) &&
         (this.loaderOnDeckBooks == undefined || this.loaderOnDeckBooks?.items.length === 0) &&
         (this.loaderRecentlyReleasedBooks == undefined || this.loaderRecentlyReleasedBooks?.items.length === 0) &&
-        (this.loaderRecentlyReadBooks == undefined || this.loaderRecentlyReadBooks?.items.length === 0)
+        (this.loaderRecentlyReadBooks == undefined || this.loaderRecentlyReadBooks?.items.length === 0) &&
+        (this.loaderRandomUnreadBooks == undefined || this.loaderRandomUnreadBooks?.items.length === 0)
     },
     individualLibrary(): boolean {
       return this.libraryId !== LIBRARIES_ALL
@@ -374,6 +377,13 @@ export default Vue.extend({
         case RecommendedViewSection.RECENTLY_READ_BOOKS:
           return {
             loader: this.loaderRecentlyReadBooks,
+            type: SectionType.BOOK,
+            value: section,
+            itemContext: [ItemContext.SHOW_SERIES],
+          }
+        case RecommendedViewSection.RANDOM_UNREAD:
+          return {
+            loader: this.loaderRandomUnreadBooks,
             type: SectionType.BOOK,
             value: section,
             itemContext: [ItemContext.SHOW_SERIES],
@@ -449,6 +459,17 @@ export default Vue.extend({
         } as BookSearch, pageable),
       ) : undefined
 
+      this.loaderRandomUnreadBooks = this.hasSection(RecommendedViewSection.RANDOM_UNREAD) ? new PageLoader<BookDto>(
+        {sort: ['random,asc']},
+        (pageable: PageRequest) => this.$komgaBooks.getBooksList({
+          condition: new SearchConditionAllOfBook([...baseBookConditions, new SearchConditionReadStatus(new SearchOperatorIs(ReadStatus.UNREAD))]),
+        } as BookSearch, pageable),
+        (book: BookDto) => {
+          book.context = {origin: ContextOrigin.RANDOM, id: ''}
+          return book
+        },
+      ) : undefined
+
       this.loaderRecentlyAddedSeries = this.hasSection(RecommendedViewSection.RECENTLY_ADDED_SERIES) ? new PageLoader<SeriesDto>(
         {},
         (pageable: PageRequest) => this.$komgaSeries.getNewSeries(requestLibraries, false, pageable),
@@ -473,6 +494,7 @@ export default Vue.extend({
           this.loaderRecentlyAddedSeries?.reload(),
           this.loaderRecentlyUpdatedSeries?.reload(),
           this.loaderRecentlyReadBooks?.reload(),
+          this.loaderRandomUnreadBooks?.reload(),
         ]).then(() => {
           this.loading = false
         })
@@ -485,6 +507,7 @@ export default Vue.extend({
           this.loaderRecentlyAddedSeries?.loadNext(),
           this.loaderRecentlyUpdatedSeries?.loadNext(),
           this.loaderRecentlyReadBooks?.loadNext(),
+          this.loaderRandomUnreadBooks?.loadNext(),
         ]).then(() => {
           this.loading = false
         })

@@ -11,6 +11,12 @@ import {
 import {ReadListDto} from '@/types/komga-readlists'
 import {R2Progression} from '@/types/readium'
 import {BookSearch} from '@/types/komga-search'
+import {ReadStatus} from '@/types/enum-books'
+import {
+  SearchConditionAllOfBook,
+  SearchConditionReadStatus,
+  SearchOperatorIs,
+} from '@/types/komga-search'
 
 const qs = require('qs')
 
@@ -300,6 +306,24 @@ export default class KomgaBooksService {
         msg += `: ${e.response.data.message}`
       }
       throw new Error(msg)
+    }
+  }
+
+  async getRandomUnreadBook(excludeBookId?: string): Promise<BookDto | undefined> {
+    try {
+      const result = await this.getBooksList(
+        {
+          condition: new SearchConditionAllOfBook([
+            new SearchConditionReadStatus(new SearchOperatorIs(ReadStatus.UNREAD)),
+          ]),
+        } as BookSearch,
+        {size: 5, sort: ['random,asc']} as PageRequest,
+      )
+      if (result.totalElements === 0) return undefined
+      const candidates = result.content.filter(b => b.id !== excludeBookId)
+      return candidates.length > 0 ? candidates[0] : result.content[0]
+    } catch (e) {
+      return undefined
     }
   }
 

@@ -93,6 +93,7 @@ class BookDtoDao(
       "readProgress.lastModified" to r.LAST_MODIFIED_DATE,
       "readProgress.readDate" to r.READ_DATE,
       "readList.number" to rlb.NUMBER,
+      "random" to DSL.rand(),
     )
 
   override fun findAll(pageable: Pageable): Page<BookDto> = findAll(BookSearch(), SearchContext.ofAnonymousUser(), pageable)

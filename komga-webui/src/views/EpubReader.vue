@@ -731,11 +731,11 @@ export default Vue.extend({
       const initialLocation = r2ProgressionToReadingPosition(progression, bookId)
 
       // parse query params to get context and contextId
-      if (this.$route.query.contextId && this.$route.query.context
+      if (this.$route.query.context
         && Object.values(ContextOrigin).includes(this.$route.query.context as ContextOrigin)) {
         this.context = {
           origin: this.$route.query.context as ContextOrigin,
-          id: this.$route.query.contextId as string,
+          id: (this.$route.query.contextId as string) || '',
         }
         this.book.context = this.context
         if (this?.context.origin === ContextOrigin.READLIST) {
@@ -831,7 +831,11 @@ export default Vue.extend({
       if (this.alwaysFullscreen) this.enterFullscreen()
 
       try {
-        if (this?.context.origin === ContextOrigin.READLIST) {
+        if (this?.context.origin === ContextOrigin.RANDOM) {
+          const randomBook = await this.$komgaBooks.getRandomUnreadBook(bookId)
+          this.siblingNext = randomBook || {} as BookDto
+          if (this.siblingNext.id) this.siblingNext.context = {origin: ContextOrigin.RANDOM, id: ''}
+        } else if (this?.context.origin === ContextOrigin.READLIST) {
           this.siblingNext = await this.$komgaReadLists.getBookSiblingNext(this.context.id, bookId)
         } else {
           this.siblingNext = await this.$komgaBooks.getBookSiblingNext(bookId)
@@ -840,7 +844,9 @@ export default Vue.extend({
         this.siblingNext = {} as BookDto
       }
       try {
-        if (this?.context.origin === ContextOrigin.READLIST) {
+        if (this?.context.origin === ContextOrigin.RANDOM) {
+          this.siblingPrevious = {} as BookDto
+        } else if (this?.context.origin === ContextOrigin.READLIST) {
           this.siblingPrevious = await this.$komgaReadLists.getBookSiblingPrevious(this.context.id, bookId)
         } else {
           this.siblingPrevious = await this.$komgaBooks.getBookSiblingPrevious(bookId)
