@@ -463,7 +463,7 @@ export default Vue.extend({
         {size: 1, sort: ['random,asc']},
         (pageable: PageRequest) => this.$komgaBooks.getBooksList({
           condition: new SearchConditionAllOfBook([...baseBookConditions, new SearchConditionReadStatus(new SearchOperatorIs(ReadStatus.UNREAD))]),
-        } as BookSearch, pageable),
+        } as BookSearch, pageable).then(page => ({...page, last: true})),
         (book: BookDto) => {
           book.context = {origin: ContextOrigin.RANDOM, id: ''}
           return book
