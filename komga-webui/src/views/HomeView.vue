@@ -349,15 +349,7 @@
         <div v-if="isAdmin && !$_.isEmpty($store.state.actuatorInfo)"
              class="pa-2 pb-6 text-caption"
         >
-          <v-badge
-            dot
-            :value="$store.getters.isLatestVersion() == 0"
-            color="warning"
-          >
-            <router-link :to="{name: 'updates'}" class="link-none">
-              v{{ $store.state.actuatorInfo.build.version }}-{{ $store.state.actuatorInfo.git.branch }}
-            </router-link>
-          </v-badge>
+          <span>v{{ $store.state.actuatorInfo.build.version }}</span>
         </div>
       </template>
     </v-navigation-drawer>

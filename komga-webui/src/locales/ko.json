@@ -292,7 +292,8 @@
     "recently_added_series": "최근 추가된 시리즈",
     "recently_read_books": "최근 읽은 책",
     "recently_released_books": "최근 출시된 책",
-    "recently_updated_series": "최근 갱신된 시리즈"
+    "recently_updated_series": "최근 갱신된 시리즈",
+    "random_unread": "랜덤 미독"
   },
   "data_import": {
     "book_number": "책 번호: {name}",

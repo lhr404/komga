@@ -292,7 +292,8 @@
     "recently_added_series": "Kürzlich hinzugefügte Serien",
     "recently_read_books": "Kürzlich gelesene Bücher",
     "recently_released_books": "Neuerscheinungen",
-    "recently_updated_series": "Kürzlich aktualisierte Serien"
+    "recently_updated_series": "Kürzlich aktualisierte Serien",
+    "random_unread": "Zufällig ungelesen"
   },
   "data_import": {
     "book_number": "Buch Nummer: {name}",

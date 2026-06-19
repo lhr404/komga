@@ -292,7 +292,8 @@
     "recently_added_series": "最近新增的系列",
     "recently_read_books": "最近閱讀的書籍",
     "recently_released_books": "最近發佈的書籍",
-    "recently_updated_series": "最近更新的系列"
+    "recently_updated_series": "最近更新的系列",
+    "random_unread": "隨機閱讀"
   },
   "data_import": {
     "book_number": "書號：{name}",

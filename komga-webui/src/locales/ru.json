@@ -288,7 +288,8 @@
     "recently_added_series": "Недавно добавленные серии",
     "recently_read_books": "Недавно прочитанные книги",
     "recently_released_books": "Недавно выпущенные книги",
-    "recently_updated_series": "Недавно Обновленные Серии"
+    "recently_updated_series": "Недавно Обновленные Серии",
+    "random_unread": "Случайное непрочитанное"
   },
   "data_import": {
     "book_number": "Номер книги: {name}",

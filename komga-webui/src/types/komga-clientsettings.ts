@@ -142,6 +142,7 @@ export enum RecommendedViewSection {
 
 export const RECOMMENDED_DEFAULT = {
   sections: [
+    {section: RecommendedViewSection.RANDOM_UNREAD},
     {section: RecommendedViewSection.KEEP_READING},
     {section: RecommendedViewSection.ON_DECK},
     {section: RecommendedViewSection.RECENTLY_RELEASED_BOOKS},
@@ -149,6 +150,5 @@ export const RECOMMENDED_DEFAULT = {
     {section: RecommendedViewSection.RECENTLY_ADDED_SERIES},
     {section: RecommendedViewSection.RECENTLY_UPDATED_SERIES},
     {section: RecommendedViewSection.RECENTLY_READ_BOOKS},
-    {section: RecommendedViewSection.RANDOM_UNREAD},
   ],
 } as ClientSettingsRecommendedView

@@ -460,7 +460,7 @@ export default Vue.extend({
       ) : undefined
 
       this.loaderRandomUnreadBooks = this.hasSection(RecommendedViewSection.RANDOM_UNREAD) ? new PageLoader<BookDto>(
-        {sort: ['random,asc']},
+        {size: 1, sort: ['random,asc']},
         (pageable: PageRequest) => this.$komgaBooks.getBooksList({
           condition: new SearchConditionAllOfBook([...baseBookConditions, new SearchConditionReadStatus(new SearchOperatorIs(ReadStatus.UNREAD))]),
         } as BookSearch, pageable),

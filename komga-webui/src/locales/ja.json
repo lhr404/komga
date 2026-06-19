@@ -292,7 +292,8 @@
     "recently_added_series": "最近追加されたシリーズ",
     "recently_read_books": "最近読んだ本",
     "recently_released_books": "最近リリースされた本",
-    "recently_updated_series": "最近更新されたシリーズ"
+    "recently_updated_series": "最近更新されたシリーズ",
+    "random_unread": "ランダム未読"
   },
   "data_import": {
     "book_number": "巻数: {name}",
