@@ -634,19 +634,23 @@ export default Vue.extend({
       })
 
       // parse query params to get context and contextId
-      if (this.$route.query.contextId && this.$route.query.context
+      if (this.$route.query.context
         && Object.values(ContextOrigin).includes(this.$route.query.context as ContextOrigin)) {
         this.context = {
           origin: this.$route.query.context as ContextOrigin,
-          id: this.$route.query.contextId as string,
+          id: (this.$route.query.contextId as string) || '',
         }
         this.book.context = this.context
-        this.$komgaReadLists.getOneReadList(this.context.id)
-          .then(v => this.contextName = v.name)
+        if (this?.context.origin === ContextOrigin.READLIST) {
+          this.$komgaReadLists.getOneReadList(this.context.id)
+            .then(v => this.contextName = v.name)
+        }
       }
 
       // Get siblings depending on origin
-      if (this?.context.origin === ContextOrigin.READLIST) {
+      if (this?.context.origin === ContextOrigin.RANDOM) {
+        // no siblings list for random mode
+      } else if (this?.context.origin === ContextOrigin.READLIST) {
         this.$komgaReadLists.getBooks(this.context.id, {unpaged: true} as PageRequest)
           .then(v => this.siblings = v.content)
       } else {
@@ -663,20 +667,25 @@ export default Vue.extend({
         document.title = `Komga - ${getBookTitleCompact(this.book.metadata.title, this.book.seriesTitle, this.book.oneshot ? undefined : this.book.metadata.number)}`
       }
 
-      if (this?.context.origin === ContextOrigin.READLIST) {
+      if (this?.context.origin === ContextOrigin.RANDOM) {
+        this.$komgaBooks.getRandomUnreadBook(bookId)
+          .then(v => {
+            this.siblingNext = v || {} as BookDto
+            if (this.siblingNext.id) this.siblingNext.context = {origin: ContextOrigin.RANDOM, id: ''}
+          })
+          .catch(e => this.siblingNext = {} as BookDto)
+        this.siblingPrevious = {} as BookDto
+      } else if (this?.context.origin === ContextOrigin.READLIST) {
         this.$komgaReadLists.getBookSiblingNext(this.context.id, bookId)
           .then(v => this.siblingNext = v)
           .catch(e => this.siblingNext = {} as BookDto)
-      } else {
-        this.$komgaBooks.getBookSiblingNext(bookId)
-          .then(v => this.siblingNext = v)
-          .catch(e => this.siblingNext = {} as BookDto)
-      }
-      if (this?.context.origin === ContextOrigin.READLIST) {
         this.$komgaReadLists.getBookSiblingPrevious(this.context.id, bookId)
           .then(v => this.siblingPrevious = v)
           .catch(e => this.siblingPrevious = {} as BookDto)
       } else {
+        this.$komgaBooks.getBookSiblingNext(bookId)
+          .then(v => this.siblingNext = v)
+          .catch(e => this.siblingNext = {} as BookDto)
         this.$komgaBooks.getBookSiblingPrevious(bookId)
           .then(v => this.siblingPrevious = v)
           .catch(e => this.siblingPrevious = {} as BookDto)
