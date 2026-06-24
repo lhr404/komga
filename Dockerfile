@@ -1,4 +1,4 @@
-FROM eclipse-temurin:21-jre AS builder
+FROM --platform=$BUILDPLATFORM eclipse-temurin:21-jre AS builder
 WORKDIR /builder
 COPY assembly/komga.jar application.jar
 RUN java -Djarmode=tools -jar application.jar extract --layers --destination extracted
