@@ -530,6 +530,7 @@ class Opds2Controller(
           authorizedLibraryIds,
           authorizedLibraryIds,
           pageable = pageable,
+          restrictions = principal.user.restrictions,
         ).map { it.toWPLinkDto() }
 
     val uriBuilder = uriBuilder("libraries${if (library != null) "/${library.id}" else ""}/collections")
@@ -562,7 +563,7 @@ class Opds2Controller(
     @PathVariable id: String,
     @Parameter(hidden = true) page: Pageable,
   ): FeedDto =
-    collectionRepository.findByIdOrNull(id, principal.user.getAuthorizedLibraryIds(null))?.let { collection ->
+    collectionRepository.findByIdOrNull(id, principal.user.getAuthorizedLibraryIds(null), principal.user.restrictions)?.let { collection ->
       val sort =
         if (collection.ordered)
           Sort.by(Sort.Order.asc("collection.number"))
@@ -614,6 +615,7 @@ class Opds2Controller(
           authorizedLibraryIds,
           authorizedLibraryIds,
           pageable = pageable,
+          restrictions = principal.user.restrictions,
         ).map { it.toWPLinkDto() }
 
     val uriBuilder = uriBuilder("libraries${if (library != null) "/${library.id}" else ""}/readlists")
@@ -646,7 +648,7 @@ class Opds2Controller(
     @PathVariable id: String,
     @Parameter(hidden = true) page: Pageable,
   ): FeedDto =
-    readListRepository.findByIdOrNull(id, principal.user.getAuthorizedLibraryIds(null))?.let { readList ->
+    readListRepository.findByIdOrNull(id, principal.user.getAuthorizedLibraryIds(null), principal.user.restrictions)?.let { readList ->
       val sort =
         if (readList.ordered)
           Sort.by(Sort.Order.asc("readList.number"))
@@ -710,7 +712,7 @@ class Opds2Controller(
     @Parameter(hidden = true) page: Pageable,
   ): FeedDto =
     seriesDtoRepository.findByIdOrNull(id, principal.user.id)?.let { series ->
-      contentRestrictionChecker.checkContentRestriction(principal.user, series)
+      contentRestrictionChecker.checkContentRestrictionSeries(principal.user, series)
 
       val bookSearch =
         BookSearch(
