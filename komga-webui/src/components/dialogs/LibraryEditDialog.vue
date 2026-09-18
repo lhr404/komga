@@ -471,7 +471,7 @@ export default Vue.extend({
         importLocalArtwork: true,
         importBarcodeIsbn: false,
         scanForceModifiedTime: false,
-        scanInterval: ScanIntervalDto.EVERY_6H,
+        scanInterval: ScanIntervalDto.DISABLED,
         scanOnStartup: false,
         scanTypes: [],
         scanDirectoryExclusions: [] as string[],
@@ -627,7 +627,7 @@ export default Vue.extend({
       this.form.importLocalArtwork = library ? library.importLocalArtwork : true
       this.form.importBarcodeIsbn = library ? library.importBarcodeIsbn : false
       this.form.scanForceModifiedTime = library ? library.scanForceModifiedTime : false
-      this.form.scanInterval = library ? library.scanInterval : ScanIntervalDto.EVERY_6H
+      this.form.scanInterval = library ? library.scanInterval : ScanIntervalDto.DISABLED
       this.form.scanOnStartup = library ? library.scanOnStartup : false
       this.form.scanTypes = []
       if (!library) this.form.scanTypes = ['cbx', 'pdf', 'epub']

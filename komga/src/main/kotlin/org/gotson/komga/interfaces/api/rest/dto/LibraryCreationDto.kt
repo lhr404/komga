@@ -16,7 +16,7 @@ data class LibraryCreationDto(
   val importLocalArtwork: Boolean = true,
   val importBarcodeIsbn: Boolean = true,
   val scanForceModifiedTime: Boolean = false,
-  val scanInterval: ScanIntervalDto = ScanIntervalDto.EVERY_6H,
+  val scanInterval: ScanIntervalDto = ScanIntervalDto.DISABLED,
   val scanOnStartup: Boolean = false,
   val scanCbx: Boolean = true,
   val scanPdf: Boolean = true,
