@@ -21,7 +21,7 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version-file: '.nvmrc'
+          node-version-file: 'komga-webui/.nvmrc'
           cache: 'npm'
           cache-dependency-path: komga-webui/package-lock.json
 
